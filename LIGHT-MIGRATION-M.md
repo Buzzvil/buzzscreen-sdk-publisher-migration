@@ -42,6 +42,14 @@ dependencies {
     **Parameters**
     - `context` : Application context 를 `this` 로 전달
     - `lockScreenPackageName` : L앱의 패키지명
+    
+- `MigrationHost.setOnDeactivatedByLockScreenAppListener(OnDeactivateByLockScreenAppListener listener)`
+
+    L앱에서 버즈스크린이 활성화되어 M앱에서 잠금화면이 비활성화 되는 경우 호출되는 리스너를 등록합니다. 필수 호출요소는 아니고, 필요에 따라 사용합니다.
+    
+    **Parameters**
+    - `OnDeactivateByLockScreenAppListener`
+        - `onDeactivated` : M앱이 비활성화 될 때 호출됨
 
 **사용 예시**
 
@@ -57,6 +65,14 @@ public class App extends Application {
         // 마이그레이션을 위한 코드
         // L앱의 패키지명이 com.buzzvil.buzzscreen.sample_lock_light 인 경우 사용 예시
         MigrationFrom.init(this, "com.buzzvil.buzzscreen.sample_lock_light");
+        
+        // L앱에서 버즈스크린이 활성화되어 M앱에서 잠금화면이 비활성화 되는 경우 호출되는 리스너 등록 예시
+        MigrationHost.setOnDeactivatedByLockScreenAppListener(new MigrationHost.OnDeactivateByLockScreenAppListener() {
+            @Override
+            public void onDeactivated() {
+                Toast.makeText(App.this, "LockScreen App이 활성화되어 기존 잠금화면을 비활성화합니다.", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }
 
@@ -81,7 +97,7 @@ public class App extends Application {
 ![Light Activation Flow From M](light_activation_flow_from_m.jpg)
 
 
-### 5. L앱을 위한 함수
+### 5. 그 밖의 유용한 함수들
 
 - `MigrationHost.isLockScreenAppActivated()`
 
@@ -89,7 +105,7 @@ public class App extends Application {
 
 - `MigrationHost.requestDeactivation()`
 
-    L앱에서 잠금화면이 활성화되어 있는 경우 해당 잠금화면을 비활성화합니다.
+    L앱에서 잠금화면이 활성화되어 있는 경우 해당 잠금화면을 비활성화합니다. M앱에서 로그아웃시에 L앱에서 잠금화면을 비활성화하고 싶은경우 이 함수를 사용합니다. 
 
 
 ### [L앱 마이그레이션 구현하러 가기](LIGHT-MIGRATION-L.md)

@@ -2,8 +2,8 @@
 
 참고 샘플 : **`sample_lock_light`**
 
-- L앱은 M앱을 통해 잠금화면에 필요한 정보를 가져올 수 있어야 잠금화면을 활성화 할 수 있습니다.
-    > 필요한 정보가 없을경우 M앱의 잠금화면 활성화 화면을 통해 잠금화면 활성화해야함을 유저에게 알려주게 됩니다. 이 과정에서 **M앱의 잠금화면 활성화 화면**으로 연결되는 딥링크가 있으면 더욱 자연스러운 유저경험을 만들 수 있습니다.
+- L앱은 M앱으로부터 잠금화면에 필요한 정보를 가져와야 잠금화면을 활성화 할 수 있습니다.
+    > 필요한 정보가 없을 경우 M앱의 [잠금화면 활성화 화면](LIGHT-MIGRATION-M.md#4.-잠금화면-활성화-화면-변경)을 통해 잠금화면 활성화해야함을 유저에게 알려주게 됩니다. 이 과정에서 **M앱의 잠금화면 활성화 화면**으로 연결되는 딥링크가 있으면 더욱 자연스러운 유저경험을 만들 수 있습니다.
 - M앱이 제거되거나 M앱에서 로그아웃 시점에 `MigrationHost.requestDeactivation()` 를 호출하면 자동으로 L앱의 잠금화면이 비활성화됩니다.
 - L앱의 버즈스크린 연동에서 유저 정보 설정 과정은 따로 진행하지 않아도 됩니다.
     > 마이그레이션 SDK를 통해 M앱에서 설정된 버즈스크린 유저 정보를 그대로 가져와서 사용하게 됩니다.
@@ -110,25 +110,25 @@ public class App extends Application {
 L앱에서의 잠금화면 활성화는 **M앱에서 정보 가져오기 -> 버즈스크린 활성화** 과정으로 진행됩니다. 그리고 L앱의 잠금화면이 활성화되면 자동으로 M앱의 잠금화면이 비활성화 됩니다. L앱이 실행될 때 이 과정이 진행되면서 마이그레이션이 되고, 이후에도 M앱의 정보를 통해 L앱의 잠금화면을 활성화시키게 됩니다.
 > 버즈스크린 활성화 과정에서는 기존 버즈스크린 연동처림 `BuzzScreen.getInstance().launch()` -> `BuzzScreen.getInstance().activate()` 를 그대로  사용합니다.
 
-M앱의 정보를 가져오기 위해서는 `MigrationClient`에서 다음 함수를 제공합니다.
+M앱의 정보를 가져오기 위해 `MigrationClient`에서 다음 함수를 제공합니다.
 
 - `checkAvailability(Activity activity, OnCheckAvailabilityListener listener)`
 
-    비동기로 M앱에서 버즈스크린 활성화에 필요한 정보들을 가져오고, M앱의 상태에따라 자동으로 잠금화면을 활성화합니다. L앱 진입화면의 `onResume` 에서 호출하여 마이그레이션이 L앱 실행시 바로 수행되도록 합니다.
+    비동기로 M앱에서 버즈스크린 활성화에 필요한 정보들을 가져오고, M앱의 상태에 따라 자동으로 잠금화면을 활성화합니다. L앱 진입화면의 `onResume` 에서 호출하여 마이그레이션이 L앱 실행시 바로 수행되도록 합니다.
     > 자동으로 잠금화면 활성화 되는 조건 : M앱에서 잠금화면을 사용중이거나 `MigrationHost.requestActivationWithLaunch()`를 호출하여 L앱을 실행한 경우.
     
     **Parameters**
     - `activity` : 이 함수가 실행되는 액티비티 전달
     - `OnCheckAvailabilityListener`
-        - `onAvailable(boolean autoActivated)` : 버즈스크린을 사용할 수 있는 경우 호출됩니다.
+        - `onAvailable(boolean autoActivated)` : 버즈스크린을 활성화할 수 있는 경우 호출됩니다.
             - `autoActivated` : 자동으로 잠금화면이 활성화되면 `ture` 그렇지않으면 `false`
         - `onError(AvailabilityCheckError error)` : 버즈스크린을 사용할 수 없는 경우 호출됩니다.
             - `MAIN_APP_NOT_INSTALLED` : M앱이 설치되지 않은 경우로 M앱의 설치를 유도합니다.
             - `MAIN_APP_MIGRATION_NOT_SUPPORTED` : M앱이 마이그레이션을 지원하지 않는 버전으로 M앱의 업데이트를 유도합니다.
-            - `NOT_ENOUGH_USER_INFO` : 버즈스크린을 활성화하는데 필요한 정보가 충분하지 않은경우 호출됩니다. M앱의 잠금화면 활성화 페이지로 이동시킵니다.
+            - `NOT_ENOUGH_USER_INFO` : 버즈스크린을 활성화하는데 필요한 정보가 충분하지 않은 경우 호출됩니다. M앱의 잠금화면 활성화 페이지로 이동시킵니다.
             - `UNKNOWN_ERROR` : 잘못된 연동 혹은 일시적인 에러로 발생할 수 있습니다. 일시적인 에러인 경우에는 재시도를 유도합니다.
 
-    - `checkAvailability`에서 `onAvailable`을 통해 잠금화면이 활성화되는 경우는 [L앱 잠금화면 활성화 흐름](LIGHT-MIGRATION-M.md#L앱-잠금화면-활성화-흐름)을 참고합니다.
+    - `checkAvailability`에서 `onAvailable`을 통해 잠금화면이 활성화되는 경우는 [L앱 잠금화면 활성화 흐름](LIGHT-MIGRATION-M.md#l앱-잠금화면-활성화-흐름)을 참고합니다.
     - `onError` 처리 흐름은 다음 그림을 참고합니다.  
 
 #### checkAvailability Error Flow
@@ -196,8 +196,9 @@ public class MainActivity extends AppCompatActivity {
 ```
 
 
-### 샘플 잠금화면 전용앱 활용하여 잠금화면 전용앱 만들기
-`sample_lock_light`에서 확인할 수 있는 샘플 잠금화면 앱은 위 가이드의 구현을 담았을 뿐만 아니라 기본 기능도 구현되어있습니다. 따라서 `sample_lock_light` 을 다운받고 다음 과정만 진행해도 잠금화면 앱이 완성됩니다.
+### 샘플을 활용하여 잠금화면 전용앱 만들기
+`sample_lock_light`에서 확인할 수 있는 샘플 잠금화면 앱은 위 가이드의 구현을 담았을 뿐만 아니라 최소한의 기능도 구현되어있습니다. 따라서 `sample_lock_light` 을 다운받고 다음 과정만 진행해도 잠금화면 앱이 완성됩니다.
+> 최소한의 기능은 아니지만 잠시 끄기 기능도 구현되어있음.
 
 1. `build.gradle` 변경 : `my_app_key`는 기존에 발급받았던 버즈스크린 앱키로 변경하고, `applicationId` 는 새롭게 만드는 잠금화면 앱의 패키지명으로 변경합니다.
 2. `AndroidManifest.xml` 변경 : `<app_license>`, `<plist>` 를 새롭게 발급받은 값으로 변경합니다.

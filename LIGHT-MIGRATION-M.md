@@ -84,7 +84,7 @@ public class App extends Application {
 
 
 ### 3. 버즈스크린 활성화/비활성화 관련 코드 제거
-잠금화면 활성화/비활성화를 위해 삽입했던 `BuzzScreen.getInstance().activate()`, `BuzzSscreen.getInstance().deactivate()`를 제거합니다. 단, 잠금화면에서 바로 잠금화면 비활성화를 제공하는 경우에는 해당 `BuzzScreen.getInstance().deactivate()` 호출만 제거하지 않습니다.
+잠금화면 활성화/비활성화를 위해 삽입했던 `BuzzScreen.getInstance().activate()`, `BuzzScreen.getInstance().deactivate()`를 제거합니다. 단, 잠금화면에서 바로 잠금화면 비활성화를 제공하는 경우에는 해당 `BuzzScreen.getInstance().deactivate()` 호출만 제거하지 않습니다.
 > 마이그레이션 SDK 연동 이후에는 마이그레이션 SDK에서 M앱의 버즈스크린 라이프사이클이 자동으로 관리되고, 유저경험을 위해 잠금화면에서만 잠금화면 비활성화 버튼을 제공하게 됩니다.
 
 
@@ -117,7 +117,7 @@ M앱에서 로그아웃이 일어나는 경우 `BuzzScreen.getInstance().logout(
 
 - `MigrationHost.isLockScreenAppActivated()`
 
-    L앱에서 잠금화면이 활성화되어 있으면 `ture`, 비활성화되어 있으면 `false`를 리턴합니다. 
+    L앱에서 잠금화면이 활성화되어 있으면 `true`, 비활성화되어 있으면 `false`를 리턴합니다. 
 
 
 ### [L앱 마이그레이션 구현하러 가기](LIGHT-MIGRATION-L.md)

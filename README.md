@@ -1,4 +1,3 @@
-# 경고!! 이 가이드는 아직 작성중!!
 # BuzzScreen Migration SDK Integration Guide
 - 구글 정책 대응을 위해, 기존 [버즈스크린을 연동](https://github.com/Buzzvil/buzzscreen-sdk-publisher)한 어플리케이션의 잠금화면을 새로운 잠금화면 전용 어플리케이션의 잠금화면으로 마이그레이션을 수행하기 위한 가이드입니다.
     > 이하 기존 버즈스크린을 연동한 어플리케이션을 M(Main) 앱으로 지칭하고, 새로운 잠금화면 전용 어플리케이션을 L(LockScreen) 앱으로 지칭 

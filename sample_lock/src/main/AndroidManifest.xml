@@ -29,12 +29,12 @@
         <!-- Configuration for BuzzScreen-->
         <!-- <app_license> 를 기존 M앱과 다른 새로운 값으로 교체합니다. -->
         <!-- <plist> 를 기존 M앱과 다른 새로운 값으로 교체합니다. -->
-        <!--<meta-data-->
-            <!--android:name="app_license"-->
-            <!--android:value="<app_license>" />-->
-        <!--<meta-data-->
-            <!--android:name="com.buzzvil.locker.mediation.baidu.plist"-->
-            <!--android:value="<plist>" />-->
+        <meta-data
+            android:name="app_license"
+            android:value="<app_license>" />
+        <meta-data
+            android:name="com.buzzvil.locker.mediation.baidu.plist"
+            android:value="<plist>" />
     </application>
 
 </manifest>

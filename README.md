@@ -16,7 +16,7 @@ M앱과 L앱 모두 마이그레이션을 위한 추가 연동작업이 있으�
 - [**LIGHT MIGRATION**](LIGHT-MIGRATION.md) : L앱 내에서 자체 로그인 기능 구현이 어렵거나 M앱의 로그인 관리를 그대로 L앱에서 사용하고 싶은 경우
     > L앱에서 버즈스크린 활성화에 필요한 유저 정보(유저아이디, 나이, 성별) 및 잠금화면 활성화 동의 절차를 앱 간의 통신을 통해 M앱에서 가져올 수 있도록 SDK에서 지원합니다. 
 
-최소한의 리소스로 L앱을 만들기 위해서는 **LIGHT MIGRATION** 방식을 추천합니다. 
+최소한의 연동 코스트로 L앱을 만들기 위해서는 **LIGHT MIGRATION** 방식을 추천합니다. 
 
 ### [LIGHT MIGRATION 구현하러 가기](LIGHT-MIGRATION.md)
 ### [FULL MIGRATION 구현하러 가기](FULL-MIGRATION.md)

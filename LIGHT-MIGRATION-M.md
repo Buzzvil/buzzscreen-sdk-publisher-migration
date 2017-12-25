@@ -3,7 +3,7 @@
 참고 샘플 : **`sample_main_light`**
 
 - M앱은 마이그레이션 이후에도 L앱에서 잠금화면 활성화에 필요한 정보들을 제공해주는 역할을 합니다.
-    > M앱에서 정보를 가져올 수 없는 경우 L앱에서는 잠금화면을 사용할 수 없고, 이 경우 유저에게 M앱의 잠금화면 활성화 화면을 통해 활성화하도록 유도합니다. 마이그레이션 SDK를 통해 제공하는 새로운 활성화 함수를 통해 이 과정이 진행됩니다.  
+    > M앱에서 정보를 가져올 수 없는 경우 L앱에서는 잠금화면을 사용할 수 없고, 이 경우 유저에게 M앱의 잠금화면 활성화 화면을 통해 활성화하도록 유도합니다. 마이그레이션 SDK를 통해 제공하는 [새로운 활성화 함수](LIGHT-MIGRATION-M.md#4-잠금화면-활성화-화면-변경)를 통해 이 과정이 진행됩니다.  
 - L앱은 항상 실행시에 M앱의 상태를 체크하여 L앱의 잠금화면 활성화 여부를 판단합니다.
     > M앱이 제거되면 자동으로 L앱에서의 잠금화면이 비활성화됩니다.
 
@@ -21,8 +21,8 @@ android {
 ```
 
 #### `dependencies` 에 추가
-M앱을 위한 마이그레이션 라이브러리를 추가하고, 버즈스크린 버전 1.6.1이상으로 업데이트해야 합니다.
-> 버즈스크린 버전이 `1.+` 인 경우는 자동으로 업데이트되기 때문에 추가작업이 필요없지만, 특정 버전으로 지정된 경우는 반드시 1.6.1 버전 이상으로 지정 필요.
+M앱을 위한 마이그레이션 라이브러리를 추가하고, 버즈스크린 버전 1.6.2이상으로 업데이트해야 합니다.
+> 버즈스크린 버전이 `1.+` 인 경우는 자동으로 업데이트되기 때문에 추가작업이 필요없지만, 특정 버전으로 지정된 경우는 반드시 1.6.2 버전 이상으로 지정 필요.
 
 ```groovy
 dependencies {
@@ -64,9 +64,9 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         // 기존 버즈스크린 초기화 코드.
-        BuzzScreen.init("app_key", this, CustomLockerActivity.class, R.drawable.image_on_fail);
+        BuzzScreen.init("app_key", this, SimpleLockerActivity.class, R.drawable.image_on_fail);
 
-        // 마이그레이션을 위한 코드
+        // 마이그레이션을 위한 초기화
         // L앱의 패키지명이 com.buzzvil.buzzscreen.sample_lock_light 인 경우 사용 예시
         MigrationHost.init(this, "com.buzzvil.buzzscreen.sample_lock_light");
         
@@ -74,7 +74,7 @@ public class App extends Application {
         MigrationHost.setOnDeactivatedByLockScreenAppListener(new MigrationHost.OnDeactivateByLockScreenAppListener() {
             @Override
             public void onDeactivated() {
-                Toast.makeText(App.this, "LockScreen App이 활성화되어 기존 잠금화면을 비활성화합니다.", Toast.LENGTH_LONG).show();
+                Log.i("MainApp", "LockScreen is deactivated by Main App");
             }
         });
     }
@@ -84,16 +84,16 @@ public class App extends Application {
 
 
 ### 3. 버즈스크린 활성화/비활성화 관련 코드 제거
-잠금화면 활성화/비활성화를 위해 삽입했던 `BuzzScreen.getInstance().activate()`, `BuzzScreen.getInstance().deactivate()`를 제거합니다. 단, 잠금화면에서 바로 잠금화면 비활성화를 제공하는 경우에는 해당 `BuzzScreen.getInstance().deactivate()` 호출만 제거하지 않습니다.
-> 마이그레이션 SDK 연동 이후에는 마이그레이션 SDK에서 M앱의 버즈스크린 라이프사이클이 자동으로 관리되고, 유저경험을 위해 잠금화면에서만 잠금화면 비활성화 버튼을 제공하게 됩니다.
+잠금화면 활성화/비활성화를 위해 삽입했던 `BuzzScreen.getInstance().activate()`, `BuzzScreen.getInstance().deactivate()`를 모두 제거합니다. 단, 잠금화면에서 바로 잠금화면 비활성화를 제공하는 경우에는 해당 `BuzzScreen.getInstance().deactivate()` 호출만 제거하지 않습니다.
+> 마이그레이션 SDK 연동 이후에는 마이그레이션 SDK에서 M앱의 버즈스크린 라이프사이클이 자동으로 관리되고, **유저경험을 위해 잠금화면에서만 잠금화면 비활성화 버튼을 제공**하게 됩니다.
 
 
 ### 4. 잠금화면 활성화 화면 변경
-L앱은 M앱의 정보를 가지고 잠금화면을 활성화 할 뿐 직접 유저에게 정보나 동의를 받는 과정이 없습니다. 이 때문에 L앱에서는 기존 M앱의 잠금화면 활성화 화면(유저 프로필, 사용동의, 활성화/비활성화 설정 화면)을 변경하여 사용하게 됩니다.
+L앱은 M앱의 유저 정보로 잠금화면을 활성화 할 뿐 직접 유저에게 정보나 동의를 받는 과정이 없습니다. 이 때문에 L앱에서는 기존 M앱의 잠금화면 활성화 화면(유저 프로필, 사용동의, 활성화/비활성화 설정 화면)을 변경하여 사용하게 됩니다.
 - 잠금화면 활성화 화면 액티비티로 이동하는 [딥링크](https://developer.android.com/training/app-links/deep-linking.html)를 설정합니다. 
-    > L앱에서 잠금화면 활성화에 필요한 정보나 유저 사용 동의가 필요한 경우 M앱의 잠금화면 활성화 화면으로 이동시켜 이 과정을 진행합니다. 만약 딥링크 개발이 어려운 경우 그냥 M앱을 실행시키게 됩니다. 
-- 앱내의 잠금화면 활성화 화면에서 활성화/비활성화를 설정하는 스위치를 배너 형태로 변경합니다. 해당 배너 클릭시 혹은 잠금화면 사용 동의를 받고 잠금화면을 활성화하는 곳(기존의 `BuzzScreen.getInstance().activate()` 호출하는 지점과 동일)에 다음 함수를 호출합니다.
-    > M앱이 마이그레이션을 지원하는 버전이 되면 이 배너가 L앱으로 마이그레이션을 수행하는 하나의 채널이 됩니다.
+    > L앱에서 잠금화면 활성화에 필요한 정보나 유저 사용 동의가 필요한 경우 M앱의 잠금화면 활성화 화면으로 이동시켜 이 과정을 진행합니다. 만약 해당 딥링크가 없으면 M앱의 초기화면을 실행합니다. 
+- 앱내의 잠금화면 활성화 화면에서 활성화/비활성화를 설정하는 스위치를 배너 형태로 변경합니다. 해당 배너 클릭시 혹은 잠금화면 사용 동의를 받고 잠금화면을 활성화하는 곳(기존 `BuzzScreen.getInstance().activate()` 호출하는 지점과 동일)에 다음 함수를 호출합니다.
+    > M앱이 마이그레이션을 지원하는 버전이 되면 이 배너가 L앱으로 마이그레이션을 수행하는 하나의 채널이 될 뿐만 아니라 처음 잠금화면을 사용하는 유저를 L앱으로 유도하는 채널이 됩니다.
 
     - `MigrationHost.requestActivationWithLaunch()`
 
@@ -107,17 +107,14 @@ L앱은 M앱의 정보를 가지고 잠금화면을 활성화 할 뿐 직접 유
 ### 5. 로그아웃 처리
 M앱에서 로그아웃이 일어나는 경우 `BuzzScreen.getInstance().logout()`, `MigrationHost.requestDeactivation()` 를 호출합니다.
 > L앱에서의 잠금화면을 비활성화하고, 다음 활성화시에 L앱에서 새로운 유저 정보를 M앱으로부터 제공받기 위해서입니다.
+
+- `BuzzScreen.getInstance().logout()`
+
+    M앱에서 잠금화면을 비활성화하고, 유저정보를 초기화합니다.
  
 - `MigrationHost.requestDeactivation()`
  
     L앱에서 잠금화면이 활성화되어 있는 경우 해당 잠금화면을 비활성화합니다.
-
-
-### 그 밖의 유용한 함수들
-
-- `MigrationHost.isLockScreenAppActivated()`
-
-    L앱에서 잠금화면이 활성화되어 있으면 `true`, 비활성화되어 있으면 `false`를 리턴합니다. 
 
 
 ### [L앱 마이그레이션 구현하러 가기](LIGHT-MIGRATION-L.md)

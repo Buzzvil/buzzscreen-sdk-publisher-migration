@@ -2,7 +2,7 @@
 참고 샘플 : **`sample_lock`**
 
 ### 1. M앱에서 연동한 버즈스크린 SDK를 L앱에도 동일하게 적용합니다.
-- 버즈스크린 SDK 버전 1.6.0 이상 사용
+- 버즈스크린 SDK 버전 1.6.3 이상 사용
 - 단, `AndroidManifest.xml`의 `app_license`와 `com.buzzvil.locker.mediation.baidu.plist`는 새로 발급(버즈빌 문의)받아서 적용해야 합니다.
     `AndroidManifest.xml` 관련 코드
     ```xml

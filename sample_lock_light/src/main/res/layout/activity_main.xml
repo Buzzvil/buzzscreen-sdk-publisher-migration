@@ -11,10 +11,17 @@
         android:layout_height="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/buzzscreen_logo" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/logo_buzzscreen" />
+
+        </FrameLayout>
 
     </android.support.v7.widget.Toolbar>
 
@@ -148,7 +155,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:drawableLeft="@mipmap/ic_launcher"
+                android:drawableLeft="@drawable/ic_bs_main_app"
                 android:text="@string/main_go_main" />
 
         </LinearLayout>

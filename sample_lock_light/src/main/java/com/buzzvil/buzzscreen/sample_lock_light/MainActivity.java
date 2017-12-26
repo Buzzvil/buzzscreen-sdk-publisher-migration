@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         // init Toolbar
         Toolbar myToolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         // init views
         topLayout = (RelativeLayout) findViewById(R.id.main_top_layout);

@@ -59,7 +59,7 @@ dependencies {
 
 
 ### 3. Application Class 에 코드 추가
-버즈스크린 연동을 위한 `BuzzScreen.init` 와 마이그레이션 연동을 위한 `MigrationClient.init`를 호출합니다.
+버즈스크린 연동을 위한 `BuzzScreen.init` 와 마이그레이션 연동을 위한 `MigrationClient.init`를 순서대로 호출합니다.
 
 - `MigrationClient.init(Context context, String mainPackageName)`
 
@@ -120,7 +120,7 @@ M앱의 정보를 가져오기 위해 `MigrationClient`에서 다음 함수를 �
     **Parameters**
     - `OnCheckAvailabilityListener`
         - `onAvailable(boolean autoActivated)` : 버즈스크린을 활성화할 수 있는 경우 호출됩니다.
-            - `autoActivated` : 자동으로 잠금화면이 활성화되면 `ture` 그렇지않으면 `false`
+            - `autoActivated` : 자동으로 잠금화면이 활성화되면 `true` 그렇지않으면 `false`
         - `onError(AvailabilityCheckError error)` : 버즈스크린을 사용할 수 없는 경우 호출됩니다.
             - `MAIN_APP_NOT_INSTALLED` : M앱이 설치되지 않은 경우로 M앱의 설치를 유도합니다.
             - `MAIN_APP_MIGRATION_NOT_SUPPORTED` : M앱이 마이그레이션을 지원하지 않는 버전으로 M앱의 업데이트를 유도합니다.

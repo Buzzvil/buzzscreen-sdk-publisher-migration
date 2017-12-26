@@ -4,7 +4,7 @@
 
 - M앱은 마이그레이션 이후에도 L앱에서 잠금화면 활성화에 필요한 정보들을 제공해주는 역할을 합니다.
     > M앱에서 정보를 가져올 수 없는 경우 L앱에서는 잠금화면을 사용할 수 없고, 이 경우 유저에게 M앱의 잠금화면 활성화 화면을 통해 활성화하도록 유도합니다. 마이그레이션 SDK를 통해 제공하는 [새로운 활성화 함수](LIGHT-MIGRATION-M.md#4-잠금화면-활성화-화면-변경)를 통해 이 과정이 진행됩니다.  
-- L앱은 항상 실행시에 M앱의 상태를 체크하여 L앱의 잠금화면 활성화 여부를 판단합니다.
+- L앱은 항상 실행시에 M앱의 상태를 체크하여 L앱의 잠금화면 활성화 가능 여부를 판단합니다.
     > M앱이 제거되면 자동으로 L앱에서의 잠금화면이 비활성화됩니다.
 
 ### 1. `build.gradle` 설정
@@ -74,7 +74,7 @@ public class App extends Application {
         MigrationHost.setOnDeactivatedByLockScreenAppListener(new MigrationHost.OnDeactivateByLockScreenAppListener() {
             @Override
             public void onDeactivated() {
-                Log.i("MainApp", "LockScreen is deactivated by Main App");
+                Log.i("MainApp", "LockScreen is deactivated by LockScreen App");
             }
         });
     }

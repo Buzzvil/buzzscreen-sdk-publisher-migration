@@ -47,14 +47,6 @@ dependencies {
     - `context` : Application context 를 `this` 로 전달
     - `lockScreenPackageName` : L앱의 패키지명
     
-- `MigrationHost.setOnDeactivatedByLockScreenAppListener(OnDeactivatedByLockScreenAppListener listener)`
-
-    L앱에서 버즈스크린이 활성화되어 M앱에서 잠금화면이 비활성화 되는 경우 호출되는 리스너를 등록합니다. 필수 호출요소는 아니고, 필요에 따라 사용합니다.
-    
-    **Parameters**
-    - `OnDeactivatedByLockScreenAppListener`
-        - `onDeactivated` : M앱의 잠금화면이 비활성화 될 때 호출됨
-
 **사용 예시**
 
 ```java

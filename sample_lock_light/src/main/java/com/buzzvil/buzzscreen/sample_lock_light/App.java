@@ -31,7 +31,7 @@ public class App extends Application {
         MigrationClient.setOnDeactivatedByMainAppListener(new MigrationClient.OnDeactivatedByMainAppListener() {
             @Override
             public void onDeactivated() {
-                Toast.makeText(App.this, "Main App의 상태가 변경(앱 삭제, 로그아웃, 탈퇴 등)되어 잠금화면을 비활성화합니다.", Toast.LENGTH_LONG).show();
+                Toast.makeText(App.this, R.string.app_deactivated_by_m, Toast.LENGTH_LONG).show();
             }
         });
     }

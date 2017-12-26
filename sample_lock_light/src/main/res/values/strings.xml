@@ -15,6 +15,8 @@
 
     <string name="main_go_main">[M App Name]으로 가기</string>
 
+    <string name="app_deactivated_by_m">[M App Name] 에서 로그아웃되어 잠금화면이 비활성화 되었습니다!</string>
+
     <string name="main_snooze_title">잠금화면 끄기</string>
     <string name="main_snooze_0">2시간 동안 끄기</string>
     <string name="main_snooze_1">6시간 동안 끄기</string>

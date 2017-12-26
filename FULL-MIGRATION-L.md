@@ -3,7 +3,7 @@
 
 ### 1. M앱에서 연동한 버즈스크린 SDK를 L앱에도 동일하게 적용합니다.
 - 버즈스크린 SDK 버전 1.6.3 이상 사용
-- 단, `AndroidManifest.xml`의 `app_license`와 `com.buzzvil.locker.mediation.baidu.plist`는 새로 발급(버즈빌 문의)받아서 적용해야 합니다.
+- 단, `AndroidManifest.xml` 의 `app_license` 와 `com.buzzvil.locker.mediation.baidu.plist` 는 새로 발급(버즈빌 문의)받아서 적용해야 합니다.
     `AndroidManifest.xml` 관련 코드
     ```xml
     <manifest>
@@ -88,17 +88,17 @@ public class App extends Application {
 
 - `migrate(OnMigrationListener onMigrationListener)`
 
-    마이그레이션을 수행하는 MigrationTo 클래스의 멤버 함수입니다. OnMigrationListener 콜백을 통해 M앱의 데이터를 전달받고 잠금화면 활성화로직을 구현하면 됩니다.
+    마이그레이션을 수행하는 MigrationTo 클래스의 멤버 함수입니다. OnMigrationListener 콜백을 통해 M앱의 데이터를 전달받고 잠금화면 활성화 로직을 구현하면 됩니다.
 
     **Parameters**
     - `onMigrationListener` : 마이그레이션 리스너
-        - `void onAlreadyMigrated()` : 이미 마이그레이션이 진행된경우 호출됩니다.
-        - `void onDataMigrated(Bundle data, boolean usingLockScreen)` : M앱에서 데이터가 전달된 후에 호출됩니다. 전달받은 데이터, M앱에서 잠금화면 사용 유무, UserProfile 정보를 조합하여 자동으로 잠금화면 활성화 할지 결정합니다.
+        - `void onAlreadyMigrated()` : 이미 마이그레이션이 진행된 경우 호출됩니다.
+        - `void onDataMigrated(Bundle data, boolean usingLockScreen)` : M앱에서 데이터가 전달된 후에 호출됩니다. 전달받은 데이터, M앱에서의 잠금화면 사용 유무, UserProfile 정보를 조합하여 자동으로 잠금화면을 활성화 할지 여부를 결정합니다.
             - `data` : M앱의 마이그레이션 작업에서 `onMigrationStarted` 를 통해 전달된 데이터
-            - `usingLockScreen` : M앱에서 버즈스크린 활성화 여부
+            - `usingLockScreen` : M앱에서의 버즈스크린 활성화 여부
         - `void onError(MigrationTo.MigrationError migrationError)` : 마이그레이션 진행시 다음과 같은 경우에 호출됩니다.
             - `MAIN_APP_NOT_INSTALLED` : M앱이 설치되지 않은 경우로, M앱의 잠금화면 활성화 과정처럼, 독자적으로 로그인을 진행하여 잠금화면을 활성화 합니다.
-            - `MAIN_APP_MIGRATION_NOT_SUPPORTED` : M앱이 마이그레이션 연동이 안된 버전일 때, M앱의 잠금화면 활성화 상태를 확인할 수 없기때문에 잠금화면이 M앱과 L앱 둘다 활성화 되는 것을 막기 위해 무조건 M앱의 업데이트를 요구합니다.
+            - `MAIN_APP_MIGRATION_NOT_SUPPORTED` : M앱이 마이그레이션 연동이 안된 버전일 때, M앱의 잠금화면 활성화 상태를 확인할 수 없기 때문에, 잠금화면이 M앱과 L앱 둘 다 활성화 되는 것을 막기 위해 무조건 M앱의 업데이트를 요구합니다.
             - `UNKNOWN_ERROR` : 잘못된 연동 혹은 일시적인 에러로 발생할 수 있습니다. 일시적인 에러인 경우에는 재시도하거나, 독자적으로 로그인을 진행하여 잠금화면을 활성화 합니다.
             
 **사용 예시**

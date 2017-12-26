@@ -104,4 +104,4 @@ public class App extends Application {
 
 ```
 
-### [L앱 마이그레이션 구현하러 가기](MIGRATION-L.md)
+### [L앱 마이그레이션 구현하러 가기](FULL-MIGRATION-L.md)

@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAvailable(boolean autoActivated) {
                 if (autoActivated) {
-                    Toast.makeText(MainActivity.this, "LockScreen is activated automatically", Toast.LENGTH_LONG).show();
+                    showAutoActivatedDialog();
                 }
                 // 잠금화면을 on/off 할 수 있는 레이아웃 구성 
                 showSwitchLayout();

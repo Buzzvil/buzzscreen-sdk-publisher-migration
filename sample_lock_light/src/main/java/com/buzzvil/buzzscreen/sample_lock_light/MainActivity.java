@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.buzzvil.buzzscreen.migration.MigrationClient;
 import com.buzzvil.buzzscreen.sdk.BuzzScreen;
@@ -98,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAvailable(boolean autoActivated) {
                 if (autoActivated) {
-                    Toast.makeText(MainActivity.this, R.string.main_toast_auto_activated, Toast.LENGTH_LONG).show();
+                    showAutoActivatedDialog();
                 }
                 showSwitchLayout();
             }
@@ -161,6 +160,27 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void showAutoActivatedDialog() {
+        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+        adb.setTitle(R.string.main_auto_activated_title);
+        adb.setMessage(R.string.main_auto_activated_message);
+        adb.setNegativeButton(R.string.main_auto_activated_close, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        adb.setPositiveButton(R.string.main_auto_activated_show_lock_screen, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                BuzzScreen.getInstance().showLockScreen();
+                finish();
+            }
+        });
+        adb.show();
     }
 
     private void showLoading() {

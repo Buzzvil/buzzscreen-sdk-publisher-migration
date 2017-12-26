@@ -1,14 +1,19 @@
 <resources>
     <string name="app_name">LockScreen App(light)</string>
 
-    <string name="main_toast_auto_activated">[L App Name] 이 활성화 되었습니다!추가 적립과 다양한 혜택을 잠금화면에서 받으세요!</string>
     <string name="main_loading">로딩 중입니다..</string>
-    <string name="main_go_main">[M App Name]으로 가기</string>
+
+    <string name="main_auto_activated_title">잠금화면 활성화</string>
+    <string name="main_auto_activated_message">[L App Name] 이 활성화 되었습니다!\n추가 적립과 다양한 혜택을 잠금화면에서 받으세요!</string>
+    <string name="main_auto_activated_show_lock_screen">잠금화면 바로가기</string>
+    <string name="main_auto_activated_close">닫기</string>
 
     <string name="main_switch_on">잠금화면 켜기</string>
     <string name="main_switch_on_status">잠금화면이\n현재 켜져 있습니다.</string>
     <string name="main_switch_off">잠금화면 끄기</string>
     <string name="main_switch_off_status">잠금화면이\n현재 꺼져 있습니다.</string>
+
+    <string name="main_go_main">[M App Name]으로 가기</string>
 
     <string name="main_snooze_title">잠금화면 끄기</string>
     <string name="main_snooze_0">2시간 동안 끄기</string>

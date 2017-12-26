@@ -14,7 +14,7 @@ import com.buzzvil.buzzscreen.sdk.SimpleLockerActivity;
 
 public class App extends Application {
 
-    public static final String LOCKSCREEN_APP_PACKAGE = "com.buzzvil.buzzscreen.sample_light_light";
+    public static final String LOCKSCREEN_APP_PACKAGE = "com.buzzvil.buzzscreen.sample_lock_light";
 
     @Override
     public void onCreate() {

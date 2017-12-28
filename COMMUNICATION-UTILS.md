@@ -18,7 +18,7 @@
 
 #### 사용 방법
 
-`MigrationXXX.getDataStorage()` 를 통해 DataStorage instance를 가져올 수 있습니다.
+`MigrationXXX.getDataStorage()` 를 통해 DataStorage instance를 가져옵니다.
 
 ##### 데이터 저장
 - `void put(String key, String value)` : key 에 매핑되는 value 를 저장합니다.
@@ -61,13 +61,13 @@ MigrationXXX.getDataStorage().getAsync("SHARED_CONFIG_KEY", new DataStorage.Asyn
 
 #### 사용 방법
 
-`MigrationXXX.getEventHandler()` 를 통해 EventHandler instance를 가져올 수 있습니다.
+`MigrationXXX.getEventHandler()` 를 통해 EventHandler instance를 가져옵니다.
 
-##### 이벤트를 보내는 앱 
+##### Event Sender
 - `void post(String eventName)` : 이벤트를 Receiver 에게 보냅니다.
 - `void post(String eventName, Bundle extras)` : Bundle 형태의 추가 데이터를 담아서 이벤트를 Receiver 에게 보냅니다.
 
-##### 이벤트를 받는 앱
+##### Event Receiver
 - `void registerEventListener(String eventName, EventHandler.OnEventListener listener)` : 특정 이벤트를 받았을 때의 로직을 OnEventListener를 통해 구현해서 eventName과 매핑해 등록합니다.
     > 반드시 Application Class 에서 호출되어야 합니다.
     
@@ -106,7 +106,7 @@ MigrationXXX.getEventHandler().registerEventListener("SAMPLE_EVENT", new EventHa
 
 #### 사용 방법
 
-`MigrationXXX.getRequestHandler()` 를 통해 RequestHandler instance를 가져올 수 있습니다.
+`MigrationXXX.getRequestHandler()` 를 통해 RequestHandler instance를 가져옵니다.
 
 ##### Client
 - `void request(int requestCode, Bundle params, Request.OnResponseListener listener)` : 서버에 요청을 보내고, 요청에 대한 응답이 왔을 때의 콜백을 구현합니다.

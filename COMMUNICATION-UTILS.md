@@ -7,11 +7,11 @@
 
 ## DataStorage
 
-두 앱 사이에 공유되는 데이터가 필요한 경우 사용합니다. 간단한 key-value 쌍으로 데이터를 관리할 수 있습니다.
+- 두 앱 사이에 공유되는 데이터가 필요한 경우 사용합니다.
+- 간단한 key-value 쌍으로 데이터를 관리할 수 있습니다.
+- `MigrationXXX.getDataStorage()` 를 통해 DataStorage instance를 가져올 수 있습니다.
 
-> MigrationXXX.getDataStorage() 를 통해 DataStorage instance를 가져올 수 있습니다.
-
-> 마이그레이션 SDK에서는 L앱의 잠금화면이 활성화 되어 있는지 여부를 확인할 때 이 유틸리티를 사용합니다. L앱에서 잠금화면이 활성화 되거나 비활성화 될 때마다 DataStorage에 값을 업데이트 시키며, M앱에서는 DataStorage로부터 이 값을 읽어서 관련 로직을 처리합니다.
+> 마이그레이션 SDK에서는 L앱의 잠금화면이 활성화 되어 있는지 여부를 확인할 때 사용합니다. L앱에서 잠금화면이 활성화 되거나 비활성화 될 때마다 DataStorage에 값을 업데이트 시키며, M앱에서는 DataStorage로부터 이 값을 읽어서 관련 로직을 처리합니다.
 
 
 ### Methods
@@ -46,9 +46,11 @@ MigrationXXX.getDataStorage().getAsync("SHARED_CONFIG_KEY", new DataStorage.Asyn
 
 ## EventHandler
 
-한쪽 방향으로만 이벤트를 전달하는 경우 사용합니다. 이벤트에 추가적으로 넣을 정보는 Bundle 로 전달 가능합니다.
+- 한쪽 방향으로만 이벤트를 전달하는 경우 사용합니다.
+- 이벤트에 추가적으로 넣을 정보는 Bundle 로 전달 가능합니다.
+- `MigrationXXX.getEventHandler()` 를 통해 EventHandler instance를 가져올 수 있습니다.
 
-> MigrationXXX.getEventHandler() 를 통해 EventHandler instance를 가져올 수 있습니다.
+> 마이그레이션 SDK에서는 M앱에서 L앱의 잠금화면을 비활성화 시킬때 사용합니다(MigrationHost의 requestDeactivation()).
 
 ### Methods
 #### Sender
@@ -78,7 +80,7 @@ MigrationXXX.getEventHandler().registerEventListener("SAMPLE_EVENT", new EventHa
     @Override
     public void onEvent(Bundle extras) {
         Log.d(TAG, "onReceive SAMPLE_EVENT");
-        String extraInfo = extras.getString("extra_info");
+        String extraInfo = extras.getString("extra_info"); // "extra_value" returned
     }
 });
 
@@ -87,7 +89,11 @@ MigrationXXX.getEventHandler().registerEventListener("SAMPLE_EVENT", new EventHa
 
 ## RequestHandler
 
-> MigrationXXX.getRequestHandler() 를 통해 RequestHandler instance를 가져올 수 있습니다.
+- 서버-클라이언트 구조와 같이 유기적으로 요청과 이에 대한 응답 처리가 필요한 경우 사용합니다.
+- 요청과 응답 시 주고받는 데이터는 Bundle 을 이용합니다.
+- `MigrationXXX.getRequestHandler()` 를 통해 RequestHandler instance를 가져올 수 있습니다.
+
+> 마이그레이션 SDK에서는 L앱에서 M앱의 버즈스크린 사용 정보를 가지고 올 때 사용합니다(MigrationClient의 checkAvailability()).
 
 ### Methods
 - `void request(int requestCode, Bundle params, Request.OnResponseListener listener)`

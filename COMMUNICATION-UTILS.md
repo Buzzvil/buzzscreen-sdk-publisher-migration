@@ -1,5 +1,6 @@
 # Communication Utils Guide
 - 마이그레이션 SDK 에서는 M앱과 L앱 사이의 통신을 위한 유틸리티를 제공합니다.
+> `migration-client`, `migration-host` SDK 0.9.3 이상부터 지원됩니다.
 - 이 유틸리티를 사용하면 M앱과 L앱은 서로를 통신의 엔드포인트로 등록을 하며, [protectionLevel="signature" 인 커스텀 퍼미션](https://developer.android.com/guide/topics/manifest/permission-element.html#plevel)을 사용하여 보안상 안전한 통신이 가능합니다.
 - 총 3종류의 상황에 적합한 유틸리티를 제공합니다.
 

@@ -3,14 +3,14 @@
 - 이 유틸리티를 사용하면 M앱과 L앱은 서로를 통신의 엔드포인트로 등록을 하며, [protectionLevel="signature" 인 커스텀 퍼미션](https://developer.android.com/guide/topics/manifest/permission-element.html#plevel)을 사용하여 보안상 안전한 통신이 가능합니다.
 - 총 3종류의 상황에 적합한 유틸리티를 제공합니다.
 
-    - 공유되는 key-value 쌍을 저장해두고 이용하려는 경우 : [DataStorage](COMMUNICATION-UTILS.md#datastorage)
+    - 공유되는 데이터 저장소가 필요한 경우 : [DataStorage](COMMUNICATION-UTILS.md#datastorage)
     - 단방향 이벤트 전달이 필요한 경우 : [EventHandler](COMMUNICATION-UTILS.md#eventhandler)
     - 완전한 서버-클라이언트 구조가 필요한 경우 : [RequestHandler](COMMUNICATION-UTILS.md#requesthandler)
 
 ## DataStorage
 
-- 두 앱 사이에 공유되는 데이터가 필요한 경우 사용합니다.
-- key-value 구조로 데이터를 관리합니다.
+- 두 앱 사이에 공유되는 데이터 저장소가 필요한 경우 사용합니다.
+- 저장소에서는 key-value 구조로 데이터를 관리합니다.
 - `MigrationXXX.getDataStorage()` 를 통해 DataStorage instance를 가져올 수 있습니다.
 
 > 마이그레이션 SDK에서는 L앱의 잠금화면이 활성화 되어 있는지 여부를 확인할 때 사용하고 있습니다. L앱에서 잠금화면이 활성화 되거나 비활성화 될 때마다 DataStorage 에 값을 업데이트 시키며, M앱에서는 L앱의 상태를 확인하고 싶을 때 DataStorage 로부터 값을 읽습니다.

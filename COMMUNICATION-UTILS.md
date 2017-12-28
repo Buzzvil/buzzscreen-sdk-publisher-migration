@@ -3,7 +3,7 @@
 - 총 3종류의 유틸리티 클래스를 제공합니다.
     - 공유되는 key-value 쌍을 저장해두고 이용하려는 경우 : [DataStorage](COMMUNICATION-UTILS.md#datastorage)
     - 단방향 이벤트 전달이 필요한 경우 : [EventHandler](COMMUNICATION-UTILS.md#eventhandler)
-    - 완전한 서버-클라이언트 구조가 필요한 경우 : [RequestHandler](COMMUNICATION-UTILS.md#requesthandler)
+    - 완전한 Server-Client 구조가 필요한 경우 : [RequestHandler](COMMUNICATION-UTILS.md#requesthandler)
 
 ## DataStorage
 
@@ -25,8 +25,7 @@
     ```
 
 #### 주의사항
-- 각 앱은 put 을 호출하면 자신의 저장소에 저장하며, get 을 호출하면 자신 -> 상대편 앱 순서대로 성공할 때까지 찾아서 리턴합니다.
-- 따라서 두 앱 모두에서 put 을 통해 서로 다른 값을 넣으면 저장소가 분리되어 있으므로 공유가 되지 않습니다. put 은 한쪽에서만 호출해야 합니다.
+- 각 앱은 put 을 호출하면 자신의 저장소에 저장하며, get 을 호출하면 자신의 저장소를 검색한 뒤 없으면 상대편 앱의 저장소를 검색합니다. 따라서 두 앱 모두에서 put 을 통해 서로 다른 값을 넣으면 서로 자신의 저장소의 값을 리턴하므로 공유가 되지 않습니다. put 은 반드시 한쪽에서만 호출해야 합니다.
 - DataStorage 는 ContentProvider 를 사용하고 있습니다. ContentProvider 특성상 소요 시간이 길어질 수 있으므로 너무 빈번하게 호출하지 않는게 좋습니다.
 
 #### Code Example
@@ -47,6 +46,7 @@ MigrationXXX.getDataStorage().getAsync("SHARED_CONFIG_KEY", new DataStorage.Asyn
 ## EventHandler
 
 - Sender 로부터 Receiver 에게로 한쪽 방향으로만 이벤트를 전달하는 경우 사용합니다.
+- 각 이벤트의 이름이 키가 되므로 Sender 와 Receiver 모두 하나의 이벤트에 대해 동일한 이벤트 이름을 사용해야 합니다.
 - 이벤트에 추가적으로 넣을 정보는 Bundle 로 전달 가능합니다.
 - `MigrationXXX.getEventHandler()` 를 통해 EventHandler instance를 가져올 수 있습니다.
 
@@ -54,8 +54,8 @@ MigrationXXX.getDataStorage().getAsync("SHARED_CONFIG_KEY", new DataStorage.Asyn
 
 #### Methods
 ##### Sender
-- `void post(String eventName)` : 특정 eventName 으로 정의된 이벤트를 보냅니다.
-- `void post(String eventName, Bundle extras)` : Bundle 형태의 데이터를 담아서 특정 eventName으로 정의된 이벤트를 보냅니다.
+- `void post(String eventName)` : 이벤트를 Receiver 에게 보냅니다.
+- `void post(String eventName, Bundle extras)` : Bundle 형태의 추가 데이터를 담아서 이벤트를 Receiver 에게 보냅니다.
 ##### Receiver
 - `void registerEventListener(String eventName, OnEventListener listener)` : 특정 이벤트를 받았을 때의 로직을 OnEventListener를 통해 구현해서 eventName과 매핑해 등록합니다.
     - OnEventListener : 이벤트를 받았을 때 onEvent 메소드가 호출되며 파라미터로 post 에서 넣은 extras 가 전달됩니다(없을 경우 null 이 아닌 빈 Bundle 전달).
@@ -64,10 +64,9 @@ MigrationXXX.getDataStorage().getAsync("SHARED_CONFIG_KEY", new DataStorage.Asyn
         void onEvent(Bundle extras);
     }
     ```
-- `void unregisterEventListener(String eventName)` : eventName으로 등록되어 있는 OnEventListener 를 해제합니다.
 
 #### 주의사항
-- Multiprocess 를 사용하는 경우
+- 프로세스 분리된 버즈스크린 SDK를 사용하는 경우, EventListener 등록 메소드(registerEventListener())는 반드시 앱의 원래 프로세스에서 호출되어야 합니다.
 
 #### Code Example
 ```java
@@ -82,6 +81,7 @@ MigrationXXX.getEventHandler().registerEventListener("SAMPLE_EVENT", new EventHa
     public void onEvent(Bundle extras) {
         Log.d(TAG, "onReceive SAMPLE_EVENT");
         String extraInfo = extras.getString("extra_info"); // "extra_value" returned
+        ...
     }
 });
 
@@ -90,7 +90,8 @@ MigrationXXX.getEventHandler().registerEventListener("SAMPLE_EVENT", new EventHa
 
 ## RequestHandler
 
-- 서버-클라이언트 구조와 같이 유기적으로 요청과 이에 대한 응답 처리가 필요한 경우 사용합니다.
+- 서버-클라이언트 구조처럼 두 앱간 유기적인 요청과 응답 처리가 필요한 경우 사용합니다.
+- 각 요청과 응답 쌍은 request code 를 통해 구별이 되므로 서버와 클라이언트 모두 같은 request code 를 사용해야 합니다.
 - 요청과 응답 시 주고받는 데이터는 Bundle 을 이용합니다.
 - `MigrationXXX.getRequestHandler()` 를 통해 RequestHandler instance를 가져올 수 있습니다.
 
@@ -98,12 +99,12 @@ MigrationXXX.getEventHandler().registerEventListener("SAMPLE_EVENT", new EventHa
 
 #### Methods
 ##### Client
-- `void request(int requestCode, Bundle params, Request.OnResponseListener listener)`
+- `void request(int requestCode, Bundle params, Request.OnResponseListener listener)` : 서버에 요청을 보내고, 요청에 대한 응답이 왔을 때의 콜백을 구현합니다.
 ##### Server
-- `void registerResponder(int requestCode, MsgRequestHandler.Responder responder)`
+- `void registerResponder(int requestCode, MsgRequestHandler.Responder responder)` : 클라이언트로부터 요청이 왔을 때의 응답을 구현합니다.
 
 #### 주의사항
-- Multiprocess 를 사용하는 경우
+- 프로세스 분리된 버즈스크린 SDK를 사용하는 경우, Responder 등록 메소드(registerResponder())는 반드시 앱의 원래 프로세스에서 호출되어야 합니다.
 
 #### Code Example
 ```java
@@ -111,8 +112,8 @@ MigrationXXX.getEventHandler().registerEventListener("SAMPLE_EVENT", new EventHa
 MigrationXXX.getRequestHandler().request(1000, null, new Request.OnResponseListener() {
     @Override
     public void onResponse(Bundle response) {
-        String value = response.getString("sample_key");
-        Log.d(TAG, "onResponse - " + value);
+        String value = response.getString("response_key"); // "response_sample" returned
+        ...
     }
 
     @Override
@@ -125,7 +126,7 @@ MigrationXXX.getRequestHandler().registerResponder(1000, new MsgRequestHandler.R
     @Override
     public Bundle respond(Bundle parameters) {
         Bundle response = new Bundle();
-        response.putString("sample_key", "sample_value");
+        response.putString("response_key", "response_sample");
         return response;
     }
 });

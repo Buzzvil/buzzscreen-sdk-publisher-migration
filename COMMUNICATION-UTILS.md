@@ -1,9 +1,9 @@
 # Communication Utils Guide
 - 마이그레이션 SDK 에서는 M앱과 L앱 사이의 통신을 위한 유틸리티를 제공합니다.
 - 총 3종류의 유틸리티 클래스를 제공합니다.
-    - 공유되는 key-value 쌍을 저장해두고 이용하려는 경우 : [DataStorage](#datastorage)
-    - 단방향 이벤트 전달이 필요한 경우 : [EventHandler](#eventhandler)
-    - 완전한 서버-클라이언트 구조가 필요한 경우 : [RequestHandler](#requesthandler)
+    - 공유되는 key-value 쌍을 저장해두고 이용하려는 경우 : [DataStorage](COMMUNICATION-UTILS.md#datastorage)
+    - 단방향 이벤트 전달이 필요한 경우 : [EventHandler](COMMUNICATION-UTILS.md#eventhandler)
+    - 완전한 서버-클라이언트 구조가 필요한 경우 : [RequestHandler](COMMUNICATION-UTILS.md#requesthandler)
 
 ## DataStorage
 

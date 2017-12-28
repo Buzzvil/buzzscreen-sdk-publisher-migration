@@ -18,7 +18,7 @@
 #### Methods
 - `void put(String key, String value)` : key 에 매핑되는 value 를 저장합니다.
 - `String get(String key)` : key 에 매핑된 value 를 Synchronous 하게 검색한 후 리턴합니다. 
-- `void getAsync(String key, AsyncQueryListener listener)` : key 에 매핑된 value 를 Asynchronous 하게 검색해서 AsyncQueryListener 에 전달합니다.
+- `void getAsync(String key, DataStoage.AsyncQueryListener listener)` : key 에 매핑된 value 를 Asynchronous 하게 검색해서 AsyncQueryListener 에 전달합니다.
 
     **Parameters**
     - `AsyncQueryListener`
@@ -57,7 +57,7 @@ MigrationXXX.getDataStorage().getAsync("SHARED_CONFIG_KEY", new DataStorage.Asyn
 - `void post(String eventName)` : 이벤트를 Receiver 에게 보냅니다.
 - `void post(String eventName, Bundle extras)` : Bundle 형태의 추가 데이터를 담아서 이벤트를 Receiver 에게 보냅니다.
 ##### Receiver
-- `void registerEventListener(String eventName, OnEventListener listener)` : 특정 이벤트를 받았을 때의 로직을 OnEventListener를 통해 구현해서 eventName과 매핑해 등록합니다.
+- `void registerEventListener(String eventName, EventHandler.OnEventListener listener)` : 특정 이벤트를 받았을 때의 로직을 OnEventListener를 통해 구현해서 eventName과 매핑해 등록합니다.
     
     **Parameters**
     - `OnEventListener`

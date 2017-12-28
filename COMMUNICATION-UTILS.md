@@ -15,14 +15,10 @@
 
 #### Methods
 - `void put(String key, String value)` : key 에 매핑되는 value 를 저장합니다.
-- `String get(String key)` : key 에 매핑된 value 를 Synchronous 하게 가져와서 리턴합니다. 
-- `void getAsync(String key, AsyncQueryListener listener)` : key 에 매핑된 value 를 Asynchronous 하게 가져와서 AsyncQueryListener 에 보냅니다.
-    - AsyncQueryListener : key에 대한 쿼리가 완료되면 onQueryComplete 메소드가 호출되며 파라미터로 value 가 전달됩니다.
-    ```java
-    public interface AsyncQueryListener {
-        void onQueryComplete(String value);
-    }
-    ```
+- `String get(String key)` : key 에 매핑된 value 를 Synchronous 하게 검색한 후 리턴합니다. 
+- `void getAsync(String key, AsyncQueryListener listener)` : key 에 매핑된 value 를 Asynchronous 하게 검색해서 AsyncQueryListener 에 보냅니다.
+    - `AsyncQueryListener`
+        - `void onQueryComplete(String value)` : 검색이 완료되면 호출되며 파라미터로 value 가 전달됩니다(없을 경우 null 전달).
 
 #### 주의사항
 - 각 앱은 put 을 호출하면 자신의 저장소에 저장하며, get 을 호출하면 자신의 저장소를 검색한 뒤 없으면 상대편 앱의 저장소를 검색합니다. 따라서 두 앱 모두에서 put 을 통해 서로 다른 값을 넣으면 서로 자신의 저장소의 값을 리턴하므로 공유가 되지 않습니다. put 은 반드시 한쪽에서만 호출해야 합니다.
@@ -58,12 +54,8 @@ MigrationXXX.getDataStorage().getAsync("SHARED_CONFIG_KEY", new DataStorage.Asyn
 - `void post(String eventName, Bundle extras)` : Bundle 형태의 추가 데이터를 담아서 이벤트를 Receiver 에게 보냅니다.
 ##### Receiver
 - `void registerEventListener(String eventName, OnEventListener listener)` : 특정 이벤트를 받았을 때의 로직을 OnEventListener를 통해 구현해서 eventName과 매핑해 등록합니다.
-    - OnEventListener : 이벤트를 받았을 때 onEvent 메소드가 호출되며 파라미터로 post 에서 넣은 extras 가 전달됩니다(없을 경우 null 이 아닌 빈 Bundle 전달).
-    ```java
-    public interface OnEventListener {
-        void onEvent(Bundle extras);
-    }
-    ```
+    - `OnEventListener`
+        - `void onEvent(Bundle extras)` : 이벤트를 받았을 때 호출되며 파라미터로 Sender 에서 보낸 추가 데이터가 전달됩니다(없을 경우 null 이 아닌 빈 Bundle 전달).
 
 #### 주의사항
 - 프로세스 분리된 버즈스크린 SDK를 사용하는 경우, EventListener 등록 메소드(registerEventListener())는 반드시 앱의 원래 프로세스에서 호출되어야 합니다.
@@ -91,7 +83,7 @@ MigrationXXX.getEventHandler().registerEventListener("SAMPLE_EVENT", new EventHa
 ## RequestHandler
 
 - 서버-클라이언트 구조처럼 두 앱간 유기적인 요청과 응답 처리가 필요한 경우 사용합니다.
-- 각 요청과 응답 쌍은 request code 를 통해 구별이 되므로 서버와 클라이언트 모두 같은 request code 를 사용해야 합니다.
+- 각 요청과 응답 쌍은 request code 를 통해 구별이 되므로 서버와 클라이언트 모두 같은 code를 사용해야 합니다.
 - 요청과 응답 시 주고받는 데이터는 Bundle 을 이용합니다.
 - `MigrationXXX.getRequestHandler()` 를 통해 RequestHandler instance를 가져올 수 있습니다.
 
@@ -100,8 +92,21 @@ MigrationXXX.getEventHandler().registerEventListener("SAMPLE_EVENT", new EventHa
 #### Methods
 ##### Client
 - `void request(int requestCode, Bundle params, Request.OnResponseListener listener)` : 서버에 요청을 보내고, 요청에 대한 응답이 왔을 때의 콜백을 구현합니다.
+    
+    **Parameters**
+    - `requestCode` : 요청을 구분하는 고유 코드
+    - `params` : 요청시 보낼 데이터가 필요한 경우 Bundle 형태로 전달합니다.
+    - `OnResponseListener`
+        - `void onResponse(Bundle response)` : 서버 앱과의 통신에 성공한 경우 호출되며 파라미터로 서버의 응답 데이터가 전달됩니다(없을 경우 null 이 아닌 빈 Bundle 전달).
+        - `void onFail(Request.FailReason failReason)` : 서버 앱과의 통신에 실패한 경우 호출됩니다. 실패의 원인이 파라미터로 전달됩니다.
+
 ##### Server
 - `void registerResponder(int requestCode, MsgRequestHandler.Responder responder)` : 클라이언트로부터 요청이 왔을 때의 응답을 구현합니다.
+    
+    **Parameters**
+    - `requestCode` : 요청을 구분하는 고유 코드
+    - `Responder`
+        - `Bundle respond(Bundle parameters)` : 클라이언트로부터 요청이 왔을 경우 호출되며 파라미터로는 클라이언트에서 보낸 request parameter가 전달됩니다. 클라이언트에 보낼 응답을 리턴해야 합니다. 
 
 #### 주의사항
 - 프로세스 분리된 버즈스크린 SDK를 사용하는 경우, Responder 등록 메소드(registerResponder())는 반드시 앱의 원래 프로세스에서 호출되어야 합니다.

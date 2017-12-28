@@ -5,7 +5,7 @@
 
     - 공유되는 key-value 쌍을 저장해두고 이용하려는 경우 : [DataStorage](COMMUNICATION-UTILS.md#datastorage)
     - 단방향 이벤트 전달이 필요한 경우 : [EventHandler](COMMUNICATION-UTILS.md#eventhandler)
-    - 완전한 Server-Client 구조가 필요한 경우 : [RequestHandler](COMMUNICATION-UTILS.md#requesthandler)
+    - 완전한 서버-클라이언트 구조가 필요한 경우 : [RequestHandler](COMMUNICATION-UTILS.md#requesthandler)
 
 ## DataStorage
 
@@ -13,7 +13,7 @@
 - key-value 구조로 데이터를 관리합니다.
 - `MigrationXXX.getDataStorage()` 를 통해 DataStorage instance를 가져올 수 있습니다.
 
-> 마이그레이션 SDK에서는 L앱의 잠금화면이 활성화 되어 있는지 여부를 확인할 때 사용하고 있습니다. L앱에서 잠금화면이 활성화 되거나 비활성화 될 때마다 DataStorage에 값을 업데이트 시키며, M앱에서는 DataStorage로부터 이 값을 읽어서 관련 로직을 처리합니다.
+> 마이그레이션 SDK에서는 L앱의 잠금화면이 활성화 되어 있는지 여부를 확인할 때 사용하고 있습니다. L앱에서 잠금화면이 활성화 되거나 비활성화 될 때마다 DataStorage 에 값을 업데이트 시키며, M앱에서는 L앱의 상태를 확인하고 싶을 때 DataStorage 로부터 값을 읽습니다.
 
 #### Methods
 - `void put(String key, String value)` : key 에 매핑되는 value 를 저장합니다.
@@ -25,8 +25,8 @@
         - `void onQueryComplete(String value)` : 검색이 완료되면 호출되며 파라미터로 value 가 전달됩니다(없을 경우 null 전달).
 
 #### 주의사항
-- 각 앱은 put 을 호출하면 데이터를 자신의 저장소에 저장하며, get 을 호출하면 자신의 저장소를 검색한 뒤 없으면 상대편 앱의 저장소를 검색합니다. 따라서 두 앱 모두에서 put 을 통해 서로 다른 값을 넣으면 서로 자신의 저장소의 값을 리턴하므로 공유가 되지 않습니다. put 은 반드시 한쪽에서만 호출해야 합니다.
-- DataStorage 는 ContentProvider 를 사용하고 있습니다. ContentProvider 특성상 소요 시간이 길어질 수 있으므로 너무 빈번하게 호출하지 않는게 좋습니다.
+- 각 앱은 put 을 호출하면 데이터를 자신의 저장소에 저장하며, get 을 호출하면 자신의 저장소를 검색한 후 값이 없으면 상대편 앱의 저장소를 검색합니다. 만약 같은 키에 대해 두 앱 모두에서 put 을 통해 서로 다른 값을 넣으면 서로 자신의 저장소에 각각 저장하므로 값이 공유가 되지 않습니다. **하나의 키에 대해서 put 은 반드시 한쪽에서만 호출해야 합니다**.
+- DataStorage 는 [ContentProvider](https://developer.android.com/guide/topics/providers/content-providers.html) 를 사용하고 있습니다. ContentProvider 특성상 데이터 처리시 소요 시간이 길어질 수 있으므로 소요 시간이 중요한 경우는 `getAsync()` 를 사용하는게 좋습니다.
 
 #### Code Example
 ```java
@@ -64,7 +64,7 @@ MigrationXXX.getDataStorage().getAsync("SHARED_CONFIG_KEY", new DataStorage.Asyn
         - `void onEvent(Bundle extras)` : 이벤트를 받았을 때 호출되며 파라미터로 Sender 에서 보낸 추가 데이터가 전달됩니다(없을 경우 null 이 아닌 빈 Bundle 전달).
 
 #### 주의사항
-- 프로세스 분리된 버즈스크린 SDK를 사용하는 경우, EventListener 등록 메소드(registerEventListener())는 반드시 앱의 원래 프로세스에서 호출되어야 합니다.
+- EventListener 등록 메소드(registerEventListener())는 반드시 Application Class에서 호출되어야 합니다.
 
 #### Code Example
 ```java
@@ -89,7 +89,7 @@ MigrationXXX.getEventHandler().registerEventListener("SAMPLE_EVENT", new EventHa
 ## RequestHandler
 
 - 서버-클라이언트 구조처럼 두 앱간 유기적인 요청과 응답 처리가 필요한 경우 사용합니다.
-- 각 요청과 응답 쌍은 request code 를 통해 구별이 되므로 서버와 클라이언트 모두 같은 code를 사용해야 합니다.
+- 각 요청과 응답 쌍은 request code 를 통해 구별이 되므로 서버와 클라이언트 모두 같은 request code를 사용해야 합니다.
 - 요청과 응답 시 주고받는 데이터는 Bundle 을 이용합니다.
 - `MigrationXXX.getRequestHandler()` 를 통해 RequestHandler instance를 가져올 수 있습니다.
 
@@ -112,10 +112,10 @@ MigrationXXX.getEventHandler().registerEventListener("SAMPLE_EVENT", new EventHa
     **Parameters**
     - `requestCode` : 요청을 구분하는 고유 코드
     - `Responder`
-        - `Bundle respond(Bundle parameters)` : 클라이언트로부터 요청이 왔을 경우 호출되며 파라미터로는 클라이언트에서 보낸 request parameter가 전달됩니다. 클라이언트에 보낼 응답을 리턴해야 합니다. 
+        - `Bundle respond(Bundle parameters)` : 클라이언트로부터 요청이 왔을 경우 호출되며, 파라미터로는 요청에 담긴 추가 파라미터가 전달됩니다. 클라이언트에 보낼 응답을 Bundle 에 담아서 리턴해야 합니다.
 
 #### 주의사항
-- 프로세스 분리된 버즈스크린 SDK를 사용하는 경우, Responder 등록 메소드(registerResponder())는 반드시 앱의 원래 프로세스에서 호출되어야 합니다.
+- Responder 등록 메소드(registerResponder())는 반드시 Application Class에서 호출되어야 합니다.
 
 #### Code Example
 ```java

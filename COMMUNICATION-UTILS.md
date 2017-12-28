@@ -10,7 +10,7 @@
 ## DataStorage
 
 - 두 앱 사이에 공유되는 데이터가 필요한 경우 사용합니다.
-- 간단한 key-value 쌍으로 데이터를 관리할 수 있습니다.
+- key-value 구조로 데이터를 관리합니다.
 - `MigrationXXX.getDataStorage()` 를 통해 DataStorage instance를 가져올 수 있습니다.
 
 > 마이그레이션 SDK에서는 L앱의 잠금화면이 활성화 되어 있는지 여부를 확인할 때 사용하고 있습니다. L앱에서 잠금화면이 활성화 되거나 비활성화 될 때마다 DataStorage에 값을 업데이트 시키며, M앱에서는 DataStorage로부터 이 값을 읽어서 관련 로직을 처리합니다.
@@ -18,12 +18,14 @@
 #### Methods
 - `void put(String key, String value)` : key 에 매핑되는 value 를 저장합니다.
 - `String get(String key)` : key 에 매핑된 value 를 Synchronous 하게 검색한 후 리턴합니다. 
-- `void getAsync(String key, AsyncQueryListener listener)` : key 에 매핑된 value 를 Asynchronous 하게 검색해서 AsyncQueryListener 에 보냅니다.
+- `void getAsync(String key, AsyncQueryListener listener)` : key 에 매핑된 value 를 Asynchronous 하게 검색해서 AsyncQueryListener 에 전달합니다.
+
+    **Parameters**
     - `AsyncQueryListener`
         - `void onQueryComplete(String value)` : 검색이 완료되면 호출되며 파라미터로 value 가 전달됩니다(없을 경우 null 전달).
 
 #### 주의사항
-- 각 앱은 put 을 호출하면 자신의 저장소에 저장하며, get 을 호출하면 자신의 저장소를 검색한 뒤 없으면 상대편 앱의 저장소를 검색합니다. 따라서 두 앱 모두에서 put 을 통해 서로 다른 값을 넣으면 서로 자신의 저장소의 값을 리턴하므로 공유가 되지 않습니다. put 은 반드시 한쪽에서만 호출해야 합니다.
+- 각 앱은 put 을 호출하면 데이터를 자신의 저장소에 저장하며, get 을 호출하면 자신의 저장소를 검색한 뒤 없으면 상대편 앱의 저장소를 검색합니다. 따라서 두 앱 모두에서 put 을 통해 서로 다른 값을 넣으면 서로 자신의 저장소의 값을 리턴하므로 공유가 되지 않습니다. put 은 반드시 한쪽에서만 호출해야 합니다.
 - DataStorage 는 ContentProvider 를 사용하고 있습니다. ContentProvider 특성상 소요 시간이 길어질 수 있으므로 너무 빈번하게 호출하지 않는게 좋습니다.
 
 #### Code Example
@@ -45,7 +47,7 @@ MigrationXXX.getDataStorage().getAsync("SHARED_CONFIG_KEY", new DataStorage.Asyn
 
 - Sender 로부터 Receiver 에게로 한쪽 방향으로만 이벤트를 전달하는 경우 사용합니다.
 - 각 이벤트의 이름이 키가 되므로 Sender 와 Receiver 모두 하나의 이벤트에 대해 동일한 이벤트 이름을 사용해야 합니다.
-- 이벤트에 추가적으로 넣을 정보는 Bundle 로 전달 가능합니다.
+- 이벤트 전달시 추가적으로 넣을 정보는 Bundle 을 이용합니다.
 - `MigrationXXX.getEventHandler()` 를 통해 EventHandler instance를 가져올 수 있습니다.
 
 > 마이그레이션 SDK에서는 M앱에서 L앱의 잠금화면을 비활성화 시킬 때 사용하고 있습니다(MigrationHost의 requestDeactivation()). L앱이 Receiver 로서 잠금화면을 비활성화시키는 로직을 구현해서 이벤트로 등록해 두고, M앱이 Sender 로서 해당 이벤트를 전송합니다.
@@ -56,6 +58,8 @@ MigrationXXX.getDataStorage().getAsync("SHARED_CONFIG_KEY", new DataStorage.Asyn
 - `void post(String eventName, Bundle extras)` : Bundle 형태의 추가 데이터를 담아서 이벤트를 Receiver 에게 보냅니다.
 ##### Receiver
 - `void registerEventListener(String eventName, OnEventListener listener)` : 특정 이벤트를 받았을 때의 로직을 OnEventListener를 통해 구현해서 eventName과 매핑해 등록합니다.
+    
+    **Parameters**
     - `OnEventListener`
         - `void onEvent(Bundle extras)` : 이벤트를 받았을 때 호출되며 파라미터로 Sender 에서 보낸 추가 데이터가 전달됩니다(없을 경우 null 이 아닌 빈 Bundle 전달).
 

@@ -130,7 +130,7 @@ Remove both `BuzzScreen.getInstance().activate()` and `BuzzScreen.getInstance().
         
 - `MigrationHost.requestActivation(OnRequestActivateResponseListener listener)`
 
-    Activate lockscreen in L app. The method above differs from `MigrationHost.requestActivationWithLaunch()` in that L app's lock screen will be activated without running L app. When activating the lock screen, user info set in the M app will be used.
+    Activates lockscreen in L app. The method above differs from `MigrationHost.requestActivationWithLaunch()` in that L app's lockscreen will be activated without running L app. When activating lockscreen, user info set in the M app will be used.
     
     **note : MigrationHost 0.9.4 or higher of M app, and MigrationClient 0.9.4 or higher of L app are required for the method above.**
      

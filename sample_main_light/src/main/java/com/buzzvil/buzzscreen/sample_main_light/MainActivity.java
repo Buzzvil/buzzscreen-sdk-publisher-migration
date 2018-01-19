@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                     String userId = "testuserid" + new Random().nextInt(100000);
                     app.login(userId);
                     UserProfile userProfile = BuzzScreen.getInstance().getUserProfile();
-                    // setUserId must be called to add point
+                    // // SetUserId must be called to give users rewards through s2s postback or batch process.
                     // 포인트 적립을 위해서는 setUserId를 반드시 호출해야 함
                     userProfile.setUserId(userId);
                     // Targeting information for campaign allocation

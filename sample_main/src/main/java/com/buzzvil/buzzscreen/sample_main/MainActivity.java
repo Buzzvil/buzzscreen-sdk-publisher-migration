@@ -60,12 +60,12 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if (isChecked) {
                     String userId = PreferenceHelper.getString(Constants.PREF_KEY_USER_ID, "");
-                    // Information delivered by user at the moment of activation
+                    // Information delivered by a user at the moment of activation
                     // 활성화 순간 유저가 전달한 정보
                     int birthYear = 1985;
                     String gender = UserProfile.USER_GENDER_MALE;
                     UserProfile userProfile = BuzzScreen.getInstance().getUserProfile();
-                    // SetUserId must be called to add point
+                    // SetUserId must be called to give users rewards through s2s postback or batch process.
                     // 포인트 적립을 위해서는 setUserId를 반드시 호출해야 함
                     userProfile.setUserId(userId);
                     // Targeting information for campaign allocation

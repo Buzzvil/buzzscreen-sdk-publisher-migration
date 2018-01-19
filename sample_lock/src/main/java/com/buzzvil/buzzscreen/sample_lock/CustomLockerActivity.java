@@ -79,8 +79,8 @@ public class CustomLockerActivity extends BaseLockerActivity {
 
     @Override
     protected void onCurrentCampaignUpdated(Campaign campaign) {
-        // This is called when the current campaign is being updated.
-        // If you want to change UI according to your current campaign, you can work here.
+        // This is called when the current campaign is updated.
+        // If you want to change UI according to the current campaign, you can write the code here.
         // 현재 보여지고 있는 캠페인이 업데이트 될때 호출됩니다.
         // 현재 캠페인에 따라 UI를 변화시키고 싶으면 여기서 작업하면 됩니다.
         Log.i(TAG, campaign.toString());

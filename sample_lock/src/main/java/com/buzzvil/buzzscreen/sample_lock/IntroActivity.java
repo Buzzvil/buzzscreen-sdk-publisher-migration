@@ -32,7 +32,7 @@ public class IntroActivity extends AppCompatActivity {
     private App app;
     private MigrationTo migration;
 
-    // Whether user were using lockscreen in main app
+    // Whether the user was using the lockscreen in the main app
     // Main 앱에서 기존에 잠금화면을 쓰고 있었는지 여부
     private boolean usingLockScreen = false;
 
@@ -54,12 +54,12 @@ public class IntroActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (app.isLoggedIn()) {
-            // If user is already logged in, app's main screen will launch.
+            // If the user was already logged in, the user will be taken to the app's main screen.
             // 이미 로그인되어 있는 경우는 앱의 메인 화면으로 진입합니다.
             startMainActivity();
         } else {
-            // If user is not logged in, user can log in automatically through the migration, or user can be requested  login manually.
-            // Implementing automatic login is recommended to minimize user disruption during migration.
+            // If the user is not logged in, user can be logged in automatically through the migration, or user can request a login manually here.
+            // Implementing automatic sign-in is recommended to minimize user attrition during migration.
             // 로그인되어있지 않은 경우는 마이그레이션을 통해 자동으로 로그인을 할 수도 있고, 수동으로 로그인을 요청할 수도 있습니다.
             // 마이그레이션시 유저이탈을 최소화하기 위해서는 자동로그인을 구현하는 것이 좋습니다.
             migration = new MigrationTo();
@@ -75,9 +75,9 @@ public class IntroActivity extends AppCompatActivity {
                 }
 
                 /**
-                 * This is called after M app receives data and the UserProfile information is updated.
+                 * This is called after the app receives data from the M app and the UserProfile information is updated.
                  * @param data Data transferred through `onMigrationStarted` in the M app migration
-                 * @param usingLockScreen Whether BuzzScreen has activated in M app
+                 * @param usingLockScreen Whether BuzzScreen has been activated in M app
                  *
                  * M앱에서 데이터를 전달받고 UserProfile 정보가 업데이트된 이후 호출됩니다.
                  * @param data M앱의 마이그레이션 연동에서 `onMigrationStarted` 를 통해 전달된 데이터
@@ -114,7 +114,8 @@ public class IntroActivity extends AppCompatActivity {
                             useManualLogin();
                             break;
                         case MAIN_APP_MIGRATION_NOT_SUPPORTED:
-                            // If the version of M app does not support migration, hold L app and require update of M app to prevent duplicated lockscreen.
+                            // If the version of the M app is a version that does not support migration, the lock screen may be duplicated.
+                            // In this case, prevent the use of the L app lockscreen and require the M app to be updated first.
                             // M앱 버전이 마이그레이션을 지원하지 않는 버전인 경우 잠금화면이 중복으로 뜰 수 있으므로 L앱 사용을 막고 M앱의 업데이트를 요구합니다.
                             alertMustUpdate();
                             break;
@@ -133,7 +134,7 @@ public class IntroActivity extends AppCompatActivity {
     public void onPause() {
         if (migration != null) {
             // Call to stop the migration progress.
-            // If you do not stop here, onDataMigrated or onAlreadyMigrated may be called in paused state.
+            // If you do not stop here, onDataMigrated or onAlreadyMigrated can be called in the paused state.
             // 마이그레이션 진행 중단을 위해 호출합니다.
             // 여기서 중단하지 않으면 paused상태에서 onDataMigrated or onAlreadyMigrated 가 호출될 수 있습니다.
             migration.abort();
@@ -179,16 +180,16 @@ public class IntroActivity extends AppCompatActivity {
 
     private void onLoginSuccess() {
         if (usingLockScreen) {
-            // User who was use lockscreen previously - activate immediately
+            // A user who was using lockscreen before - activated immediately
             // 이전에 잠금화면을 쓰고 있던 유저 - 바로 activate
             Toast.makeText(IntroActivity.this, "Activated lockscreen according to the previous setting", Toast.LENGTH_LONG).show();
-            // Validation of migrated Profile
+            // Validate the migrated Profile data
             // 옮겨진 Profile 에 대한 유효성 검사
             app.checkAndSetBuzzScreenProfile();
             BuzzScreen.getInstance().activate();
             startMainActivity();
         } else {
-            // User who has not previously use lockscreen - Let the user choose to activate
+            // A user who was not using lockscreen - Let the user choose to activate
             // 이전에 잠금화면을 쓰고 있지 않던 유저 - 유저에게 activate 여부 선택하게 하기
             dialog = new AlertDialog.Builder(IntroActivity.this)
                     .setMessage("Would you like to activate the lockscreen?")

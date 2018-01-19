@@ -139,8 +139,8 @@ Remove both `BuzzScreen.getInstance().activate()` and `BuzzScreen.getInstance().
         - `onAlreadyActivated()` : This method will be called if BuzzScreen was already enabled in L app.
         - `onActivated()` : This method will be called when BuzzScreen is enabled in L app.
         - `onError(RequestActivationError error)` : This method will be called when BuzzScreen of L app activation fails.
-            - `LOCKSCREEN_APP_NOT_INSTALLED` : Error code indicating when activation failed because L app is not installed
-            - `LOCKSCREEN_APP_MIGRATION_NOT_SUPPORTED` : Error code indicating when activation failed due to no migration in the app
+            - `LOCKSCREEN_APP_NOT_INSTALLED` : Error code indicating when activation fails because L app is not installed
+            - `LOCKSCREEN_APP_MIGRATION_NOT_SUPPORTED` : Error code indicating when the activation fails because the L App doesn't support migration features.
             - `UNKNOWN_ERROR` : Error code indicating incorrect integration or temporary error
             
 ### [L app Migration Implementation](LIGHT-MIGRATION-L-EN.md)

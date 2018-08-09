@@ -218,6 +218,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     BuzzScreen.getInstance().deactivate();
+                    btnDeactivateOnError.setVisibility(View.GONE);
                 }
             });
         } else {

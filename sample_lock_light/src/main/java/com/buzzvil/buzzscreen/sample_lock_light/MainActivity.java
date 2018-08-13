@@ -98,11 +98,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        showLoading();
         checkAvailability();
     }
 
     private void checkAvailability() {
+        showLoading();
         migrationClient.checkAvailability(new MigrationClient.OnCheckAvailabilityListener() {
             @Override
             public void onAvailable(boolean autoActivated) {

@@ -1,10 +1,9 @@
 package com.buzzvil.buzzscreen.sample_main_light;
 
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -76,24 +75,7 @@ public class MainActivity extends AppCompatActivity {
                 if (app.isTermAgree()) {
                     // The location where you originally called BuzzScreen.getInstance().activate()
                     // 기존에 BuzzScreen.getInstance().activate() 호출하던 위치
-                    MigrationHost.requestActivation(new MigrationHost.OnRequestActivateResponseListener() {
-                        @Override
-                        public void onAlreadyActivated() {
-                            Log.d("MainActivity", "[onAlreadyActivated]");
-                        }
-
-                        @Override
-                        public void onActivated() {
-                            Log.d("MainActivity", "[onActivated]");
-
-                        }
-
-                        @Override
-                        public void onError(MigrationHost.RequestActivationError requestActivationError) {
-                            Log.d("MainActivity", "[onError]");
-
-                        }
-                    });
+                    MigrationHost.requestActivationWithLaunch();
                 } else {
                     dialog = new AlertDialog.Builder(MainActivity.this)
                             .setMessage(R.string.light_user_agreement)
@@ -103,22 +85,7 @@ public class MainActivity extends AppCompatActivity {
                                     app.setTermAgree(true);
                                     // The location where you originally called BuzzScreen.getInstance().activate()
                                     // 기존에 BuzzScreen.getInstance().activate() 호출하던 위치
-                                    MigrationHost.requestActivation(new MigrationHost.OnRequestActivateResponseListener() {
-                                        @Override
-                                        public void onAlreadyActivated() {
-
-                                        }
-
-                                        @Override
-                                        public void onActivated() {
-
-                                        }
-
-                                        @Override
-                                        public void onError(MigrationHost.RequestActivationError requestActivationError) {
-
-                                        }
-                                    });
+                                    MigrationHost.requestActivationWithLaunch();
                                 }
                             })
                             .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

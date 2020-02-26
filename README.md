@@ -1,2 +1,1 @@
-# BuzzScreen Migration SDK 
-- 연동 가이드: https://github.com/Buzzvil/buzzscreen-sdk-publisher-migration/wiki
+Moved to https://github.com/Buzzvil/buzz-sdk-samples => ./buzzscreen-extension-migration
